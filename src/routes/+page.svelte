@@ -22,14 +22,15 @@
 	let getimg = async () => {
 		try {
 			let { data, error } = await supabase.storage.from('Images').getPublicUrl(imgname);
-			console.log(data);
+			// console.log(data);
 			retriveimg = data?.publicUrl;
-			return error ? null : data?.publicUrl;
 		} catch (e) {
 			console.log(e);
 		}
+		imgname = crypto.randomUUID() + '.jpg';
+		avatar = null;
 	};
-
+	// $: console.log(imgname);
 	let uploadImage = async () => {
 		try {
 			let { data, error } = await supabase.storage.from('Images').upload(imgname, userimg);
@@ -65,14 +66,13 @@
 			/>
 		</div>
 		<button
-			type="button" on:click={uploadImage}
+			type="button"
+			on:click={uploadImage}
 			class="rounded-md bg-gray-900 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-900 mb-4"
 			>Upload</button
 		>
 	</div>
-	<div
-		class="flex items-center border border-gray-700 m-8  rounded-md p-4 flex-wrap justify-center "
-	>
+	<div class="flex items-center border border-gray-700 m-8 rounded-md p-4 flex-wrap justify-center">
 		{#if retriveimg.length > 0}
 			<img class="avatar border border-gray-700 rounded-md" src={retriveimg} alt="" />
 		{:else}
